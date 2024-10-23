@@ -1,0 +1,346 @@
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#000000"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Toolbar -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/navbackground"
+                app:menu="@menu/drawer_menu"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/textTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingBottom="16dp"
+                android:text="Enchanted Performance"
+                android:textColor="#9d03fc"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvRemainingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#9d03fc"
+                android:text="Time remaining: How did you get here?"
+                android:textSize="18sp"
+                android:paddingTop="20dp" />
+
+            <TextView
+                android:id="@+id/welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingBottom="16dp"
+                android:text="Welcome"
+                android:textColor="#9d03fc"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <!-- Logo in the center -->
+            <TextView
+                android:id="@+id/cpuSpeedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="CPU Speed: "
+                android:textColor="#9d03fc"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/cpuGovernorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:text="CPU Governor: "
+                android:textColor="#9d03fc"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/logoImage"
+                android:layout_width="151dp"
+                android:layout_height="95dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/imgs" />
+
+            <!-- Toggle Button: Google Apps -->
+            <Button
+                android:id="@+id/toggleSelinuxButton"
+                android:layout_width="243dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/navbackground"
+                android:text="SELinux Toggle"
+                android:textSize="20dp"
+                android:textColor="#000000" />
+
+            <!-- TextView on top of the Button -->
+            <TextView
+                android:id="@+id/selinuxStatusTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="-3dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="SELinux Status"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Status: "
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/statusroot"
+                android:layout_width="307dp"
+                android:layout_height="84dp"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif-light"
+                android:text="Status Root: "
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <ToggleButton
+                android:id="@+id/toggleButton"
+                android:layout_width="121dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/anime_toggle_button_background"
+                android:elevation="4dp"
+                android:padding="12dp"
+                android:textColor="#FFFFFF"
+                android:textOff="Enable Google Apps"
+                android:textOn="Disable Google Apps" />
+
+            <!-- Boost and Balance CPU Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnBoostCpu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/anime_button_background"
+                    android:elevation="4dp"
+                    android:padding="12dp"
+                    android:text="CPU Performance"
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btnBalanceCpu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/anime_button_background"
+                    android:elevation="4dp"
+                    android:padding="12dp"
+                    android:text="CPU Balanced"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <!-- Boost and Balance GPU Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnBoostGpu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/anime_button_background"
+                    android:elevation="4dp"
+                    android:padding="12dp"
+                    android:text="GPU Performance"
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btnBalanceGpu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/anime_button_background"
+                    android:elevation="4dp"
+                    android:padding="12dp"
+                    android:text="GPU Balance"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <!-- GPU Lock Buttons for Mediatek and Snapdragon -->
+            <ToggleButton
+                android:id="@+id/toggleClockBoost"
+                android:layout_width="202dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/anime_toggle_button_background"
+                android:elevation="5dp"
+                android:padding="12dp"
+                android:textColor="#FFFFFF"
+                android:textOff="Lock CPU"
+                android:textOn="Turn Off" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ToggleButton
+                    android:id="@+id/toggleGpuMediatek1"
+                    android:layout_width="186dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/anime_toggle_button_background"
+                    android:elevation="4dp"
+                    android:padding="12dp"
+                    android:textColor="#FFFFFF"
+                    android:textOff="Lock GPU Mediatek #1 🔒"
+                    android:textOn="Turn Off #1 🔓" />
+
+                <ToggleButton
+                    android:id="@+id/toggleGpuMediatek2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/anime_toggle_button_background"
+                    android:elevation="4dp"
+                    android:padding="12dp"
+                    android:textColor="#FFFFFF"
+                    android:textOff="Lock GPU Mediatek #2 🔒"
+                    android:textOn="Turn Off #2 🔓" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="8dp">
+
+                <ToggleButton
+                    android:id="@+id/toggleGpuSnapdragon1"
+                    android:layout_width="187dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/anime_toggle_button_background"
+                    android:elevation="4dp"
+                    android:padding="12dp"
+                    android:textColor="#FFFFFF"
+                    android:textOff="Lock GPU Snapdragon #1 🔒"
+                    android:textOn="Turn Off #1 🔓" />
+
+                <ToggleButton
+                    android:id="@+id/toggleGpuSnapdragon2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/anime_toggle_button_background"
+                    android:elevation="4dp"
+                    android:padding="12dp"
+                    android:textColor="#FFFFFF"
+                    android:textOff="Lock GPU Snapdragon #2 🔒"
+                    android:textOn="Turn Off #2 🔓" />
+            </LinearLayout>
+
+            <!-- Unlock Max Graphics Button -->
+            <Button
+                android:id="@+id/btnUnlockML"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="1dp"
+                android:backgroundTint="#6a00b0"
+                android:elevation="4dp"
+                android:padding="12dp"
+                android:text="Unlock Max Graphics"
+                android:textColor="#FFFFFF" />
+
+            <!-- FPS Contributor Text -->
+            <TextView
+                android:id="@+id/fpsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:text="Contributor: Zorknov, Ryuu, Aldiwbw, Silly"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+            <!-- App By Text -->
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:text="App By Rafaeru"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+            <!-- Shutdown and Logout Buttons -->
+            <Button
+                android:id="@+id/btnShutdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="#6a00b0"
+                android:elevation="4dp"
+                android:padding="12dp"
+                android:text="Tombol Iseng"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:layout_marginTop="20dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.drawerlayout.widget.DrawerLayout>

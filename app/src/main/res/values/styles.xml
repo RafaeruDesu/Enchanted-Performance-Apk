@@ -1,0 +1,8 @@
+<resources>
+    <!-- Tema khusus untuk Spinner -->
+    <style name="CustomSpinnerTheme" parent="Theme.AppCompat.Light">
+        <item name="android:popupBackground">#03A9F4</item> <!-- Latar belakang drop-down spinner -->
+        <item name="android:textColor">#FFFFFF</item> <!-- Warna teks -->
+        <item name="android:textColorPrimary">#03A9F4</item> <!-- Warna teks utama -->
+    </style>
+</resources>

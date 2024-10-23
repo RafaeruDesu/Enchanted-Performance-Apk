@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Enchanted Performance</string>
+    <string name="navigation_drawer_open"><![CDATA[<!-- res/drawable/navigation_drawer_open.xml -->\n<vector xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    android:width=\"24dp\"\n    android:height=\"24dp\"\n    android:viewportWidth=\"24\"\n    android:viewportHeight=\"24\">\n    <path\n        android:fillColor=\"#000000\"\n        android:pathData=\"M3,6h18v2H3V6zm0,5h18v2H3v-2zm0,5h18v2H3v-2z\"/>\n</vector>\n]]></string>
+    <string name="navigation_drawer_close"><![CDATA[<!-- res/values/strings.xml -->\n<resources>\n    <string name=\"navigation_drawer_open\">Open Navigation Drawer</string>\n    <string name=\"navigation_drawer_close\">Close Navigation Drawer</string>\n    <!-- Add other strings here -->\n</resources>\n]]></string>
+</resources>

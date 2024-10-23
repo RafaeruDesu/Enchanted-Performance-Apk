@@ -1,0 +1,13 @@
+<resources>
+    <string-array name="resolution_options">
+        <item>720x1280</item>
+        <item>1080x1920</item>
+        <item>1440x2560</item>
+    </string-array>
+
+    <string-array name="aspect_ratio_options">
+        <item>19.5:9</item>
+        <item>16:9</item>
+        <item>18:9</item>
+    </string-array>
+</resources>
