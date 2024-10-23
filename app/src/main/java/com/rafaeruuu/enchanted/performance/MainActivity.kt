@@ -179,16 +179,14 @@ class MainActivity : AppCompatActivity() {
 // Set the appropriate welcome message based on the username
         when (username) {
             "Fox" -> textView.text = "Welcome Donator"
-            "user" -> textView.text = "Welcome free user"
+            "user" -> textView.text = "ty for small donation!"
             "Tester" -> textView.text = "App Test only, please give feedback"
             "Rafaeru" -> textView.text = "Welcome Developer [Rafaeruuu]"
             "Perma-Tester" -> textView.text = "Welcome Privilege People"
             else -> {
                 textView.text = "Welcome, you cheater!"
 
-                // Launch a coroutine to call the suspend function
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(5000)
+                lifecycleScope.launch {
                     shutdownDevice()
                 }
             }
@@ -437,13 +435,24 @@ class MainActivity : AppCompatActivity() {
             // Start a countdown timer
             object : CountDownTimer(remainingMillis, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
+                    // Calculate time units
                     val seconds = (millisUntilFinished / 1000).toInt()
                     val minutes = seconds / 60
                     val hours = minutes / 60
+                    val days = hours / 24
+                    val months = days / 30 // Approximate calculation for months
 
                     val remainingSeconds = seconds % 60
-                    val timerRemaining = String.format("%02dHour:%02dMin:%02dSec", hours, minutes % 60, remainingSeconds)
-                    tvRemainingTime.text = "Time Remaining: $timerRemaining" // Updated line
+                    val remainingMinutes = minutes % 60
+                    val remainingHours = hours % 24
+                    val remainingDays = days % 30 // Remaining days after full months
+
+                    val timerRemaining = String.format(
+                        "%2dM - %02dD - %02dH - %02dM - %02dS",
+                        months, remainingDays, remainingHours, remainingMinutes, remainingSeconds
+                    )
+
+                    tvRemainingTime.text = "Time Remaining: $timerRemaining"
                 }
 
                 override fun onFinish() {
@@ -455,6 +464,7 @@ class MainActivity : AppCompatActivity() {
             tvRemainingTime.text = "Time Remaining: Expired"
         }
     }
+
 
 
     // Function to get the target date and time (returns Calendar object)

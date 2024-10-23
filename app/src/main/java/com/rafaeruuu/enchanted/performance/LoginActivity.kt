@@ -8,10 +8,15 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.rafaeruuu.enchanted.performance.ui.GovernorManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class LoginActivity : AppCompatActivity() {
@@ -68,10 +73,11 @@ class LoginActivity : AppCompatActivity() {
                     // Set target date and time
                     saveTargetDateAndTime(2024, 10, 23, 24, 15)
                 }
-                if (username == "user") {
+                else if (username == "user") {
                     // Set target date and time
                     saveTargetDateAndTime(2024, 11, 1, 24, 1)
                 }
+
 
                 // Check if login has expired
                 if (isLoginExpired()) {
@@ -90,6 +96,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
 
     // Function to validate login
     private fun validateLogin(username: String, password: String): Boolean {
