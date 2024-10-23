@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
                 // Check for time user
                 if (username == "Tester") {
                     // Set target date and time
-                    saveTargetDateAndTime(2024, 10, 23, 24, 15)
+                    saveTargetDateAndTime(2024, 10, 28, 24, 15)
                 }
                 else if (username == "user") {
                     // Set target date and time
