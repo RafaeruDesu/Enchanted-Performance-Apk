@@ -10,11 +10,11 @@ Take charge of your system like never before! Our app lets you customize SELinux
 
 🌟 Key Features:
 
-Toggle Google Apps: Enable or disable as needed for a streamlined experience.
-CPU & GPU Lock: Fine-tune performance to fit your gaming style.
-Performance/Balance Governors: Choose the perfect settings for your CPU and GPU.
-SELinux Toggle for Mobile Banking: Enhance security while you game.
-CPU Speed/Governor Monitor: Keep track of your device’s performance in real-time.
-Unlock Graphics for Mobile Legends: Experience stunning visuals with 120 FPS on Ultra settings.
-Memory Cleaner (Root Method): Free up resources and keep your device running smoothly.
-Elevate your gaming today with our Game Booster Root app and dominate the competition like never before!
+- Toggle Google Apps: Enable or disable as needed for a streamlined experience.
+- CPU & GPU Lock: Fine-tune performance to fit your gaming style.
+- Performance/Balance Governors: Choose the perfect settings for your CPU and GPU.
+- SELinux Toggle for Mobile Banking: Enhance security while you game.
+- CPU Speed/Governor Monitor: Keep track of your device’s performance in real-time.
+- Unlock Graphics for Mobile Legends: Experience stunning visuals with 120 FPS on Ultra settings.
+- Memory Cleaner (Root Method): Free up resources and keep your device running smoothly.
+- Elevate your gaming today with our Game Booster Root app and dominate the competition like never before!
