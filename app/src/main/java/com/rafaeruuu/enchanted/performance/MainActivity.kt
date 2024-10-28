@@ -178,9 +178,9 @@ class MainActivity : AppCompatActivity() {
         } else if (username == "Rafaeru") {
             tvRemainingTime.text = "Time Remaining: Hello [Rafaeru]"
         } else if (username == "Fox") {
-            tvRemainingTime.text = "Time Remaining: Hello Donator you dont have time remaining to use this app"
-        } else if (username == "User") {
-            tvRemainingTime.text = "Time Remaining: "
+            tvRemainingTime.text = "Time Remaining: Hello Big Donator you dont have time remaining to use this app"
+        } else if (username == "donation") {
+            displayRemainingTime()
         } else {
             tvRemainingTime.text = "Time Remaining: How did you get here?"
             lifecycleScope.launch {
@@ -198,7 +198,7 @@ class MainActivity : AppCompatActivity() {
             "Rafaeru" -> textView.text = "Welcome Developer [Rafaeruuu]"
             "Perma-Tester" -> textView.text = "Welcome Privilege People"
             else -> {
-                Toast.makeText(this, "APK has been tampered with!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "APK has been cracked!", Toast.LENGTH_LONG).show()
                 lifecycleScope.launch {
                     welcome()
                 }
@@ -471,6 +471,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun clearRam() {
         try {
+
             val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
             val packageManager = packageManager
             val runningProcesses = activityManager.runningAppProcesses
