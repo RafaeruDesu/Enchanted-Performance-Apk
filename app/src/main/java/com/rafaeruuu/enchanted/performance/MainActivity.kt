@@ -470,35 +470,77 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun clearRam() {
-        try {
+        Thread {
+            try {
+                val packageManager = packageManager
+                val availableRamInMB = getAvailableRamInMB()
+                val stoppedPackages = mutableListOf<String>()
+                val essentialSystemPackages = setOf(
+                    "com.android.systemui", // System UI
+                    "com.android.launcher", // Default launcher
+                    "android",              // Android system
+                    "com.google.android.gms" // Google Play Services, if applicable
+                )
 
-            val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-            val packageManager = packageManager
-            val runningProcesses = activityManager.runningAppProcesses
+                // Fetch all installed packages, including system packages
+                val installedPackages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
 
-            for (processInfo in runningProcesses) {
-                val packageName = processInfo.processName
-                try {
-                    val appInfo = packageManager.getApplicationInfo(packageName, 0)
-                    val isSystemApp = (appInfo.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0
+                // Set SELinux to permissive mode to allow force-stopping apps
+                Runtime.getRuntime().exec(arrayOf("su", "-c", "setenforce 0")).waitFor()
 
-                    if (processInfo.importance >= ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND && !isSystemApp) {
-                        val pid = processInfo.pid
+                for (pkgInfo in installedPackages) {
+                    val packageName = pkgInfo.packageName
 
-                        Runtime.getRuntime().exec(arrayOf("su", "-c", "kill -9 $pid"))
-                        Runtime.getRuntime().exec(arrayOf("su", "-c", "am force-stop $packageName"))
+                    // Exclude essential system packages and the current app itself
+                    if (!essentialSystemPackages.contains(packageName) && packageName != "com.rafaeruuu.enchanted.performance") {
+                        try {
+                            // Force stop the application
+                            val process = Runtime.getRuntime().exec(arrayOf("su", "-c", "am force-stop $packageName"))
+                            process.waitFor()
+
+                            stoppedPackages.add(packageName) // Add to stopped list
+
+                            // Update UI for progress
+                            runOnUiThread {
+                                statusText.text = "Stopping: $packageName"
+                            }
+
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
-                } catch (e: PackageManager.NameNotFoundException) {
-                    e.printStackTrace()
+                }
+
+                // Clear caches to release additional RAM
+                Runtime.getRuntime().exec(arrayOf("su", "-c", "sync; echo 3 > /proc/sys/vm/drop_caches")).waitFor()
+
+                // Return SELinux to enforcing mode
+                Runtime.getRuntime().exec(arrayOf("su", "-c", "setenforce 1")).waitFor()
+
+                // Display final status on the UI
+                runOnUiThread {
+                    statusText.text = "Hard Clear RAM executed"
+                    statusroottext.text = "RAM Available: $availableRamInMB MB, Stopped Apps: ${stoppedPackages.joinToString(", ")}"
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // Display an error if the process fails
+                runOnUiThread {
+                    statusText.text = "Error occurred while clearing RAM"
                 }
             }
-
-            Runtime.getRuntime().exec(arrayOf("su", "-c", "sync; echo 3 > /proc/sys/vm/drop_caches"))
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        }.start()
     }
+
+
+
+
+
+
+
+
+
 
     private fun updateRamInfo(ramUsageText: TextView, availableRamText: TextView) {
         val ramUsagePercentage = getRamUsagePercentage()
