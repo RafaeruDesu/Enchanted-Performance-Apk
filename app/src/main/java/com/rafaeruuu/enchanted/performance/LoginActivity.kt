@@ -26,14 +26,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var btnLogin: Button
     private lateinit var sharedPreferences: SharedPreferences
 
-    // Hardcoded users and their passwords
-    private val userPasswords = mapOf(
-        "Fox" to "kitsune",
-        "Rafaeru" to "Raphiel",
-        "Tester" to "Meong",
-        "user" to "RafaeruUPDATE",
-        "Perma-Tester" to "Ryuu"
-    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
