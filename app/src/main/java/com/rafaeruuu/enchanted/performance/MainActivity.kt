@@ -1,12 +1,16 @@
 package com.rafaeruuu.enchanted.performance
 
+import android.app.ActivityManager
 import android.app.Dialog
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -41,6 +45,7 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.Calendar
+import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
@@ -147,6 +152,8 @@ class MainActivity : AppCompatActivity() {
         val toggleClockBoost = findViewById<ToggleButton>(R.id.toggleClockBoost)
         val btnBoostGpu: Button = findViewById(R.id.btnBoostGpu)
         val btnBalanceGpu: Button = findViewById(R.id.btnBalanceGpu)
+        val availableRam = getAvailableRamInMB()
+        Log.d("RAM_INFO", "Available RAM: $availableRam MB")
 
         // Initialize SharedPreferences again if needed
         sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
@@ -172,26 +179,31 @@ class MainActivity : AppCompatActivity() {
             tvRemainingTime.text = "Time Remaining: Hello [Rafaeru]"
         } else if (username == "Fox") {
             tvRemainingTime.text = "Time Remaining: Hello Donator you dont have time remaining to use this app"
+        } else if (username == "User") {
+            tvRemainingTime.text = "Time Remaining: "
         } else {
             tvRemainingTime.text = "Time Remaining: How did you get here?"
+            lifecycleScope.launch {
+                welcome()
+            }
         }
+
 
 // Set the appropriate welcome message based on the username
         when (username) {
             "Fox" -> textView.text = "Welcome Donator"
-            "user" -> textView.text = "ty for small donation!"
+            "Donation" -> textView.text = "ty for small donation!"
+            "donation" -> textView.text = "ty for small donation!"
             "Tester" -> textView.text = "App Test only, please give feedback"
             "Rafaeru" -> textView.text = "Welcome Developer [Rafaeruuu]"
             "Perma-Tester" -> textView.text = "Welcome Privilege People"
             else -> {
-                textView.text = "Welcome, you cheater!"
-
+                Toast.makeText(this, "APK has been tampered with!", Toast.LENGTH_LONG).show()
                 lifecycleScope.launch {
-                    shutdownDevice()
+                    welcome()
                 }
             }
         }
-
 
         // Check SELinux status
         CoroutineScope(Dispatchers.Main).launch {
@@ -248,6 +260,20 @@ class MainActivity : AppCompatActivity() {
             } else {
                 statusroottext.text = "Status Root: Access granted. You can use the app."
             }
+        }
+
+        val ramUsageText = findViewById<TextView>(R.id.ramUsageText)
+        val availableRamText = findViewById<TextView>(R.id.availableRamText)
+        val clearRamButton = findViewById<Button>(R.id.clearRamButton)
+
+
+        updateRamInfo(ramUsageText, availableRamText)
+
+        clearRamButton.setOnClickListener {
+            vibratePhone()
+            clearRam()
+            updateRamInfo(ramUsageText, availableRamText)
+            Toast.makeText(this@MainActivity, "Ram Cleaned using Root Access", Toast.LENGTH_SHORT).show()
         }
 
         toggleButton.setOnCheckedChangeListener { _, isChecked ->
@@ -421,6 +447,65 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getRamUsagePercentage(): Int {
+        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val memoryInfo = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(memoryInfo)
+
+        val totalRam = memoryInfo.totalMem.toDouble()
+        val availableRam = memoryInfo.availMem.toDouble()
+        val usedRam = totalRam - availableRam
+
+        return ((usedRam / totalRam) * 100).roundToInt()
+    }
+
+    private fun getAvailableRamInMB(): Long {
+        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val memoryInfo = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(memoryInfo)
+
+        Log.d("RAM_INFO", "Available Memory (bytes): ${memoryInfo.availMem}")
+
+        return memoryInfo.availMem / (1024 * 1024)
+    }
+
+    private fun clearRam() {
+        try {
+            val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            val packageManager = packageManager
+            val runningProcesses = activityManager.runningAppProcesses
+
+            for (processInfo in runningProcesses) {
+                val packageName = processInfo.processName
+                try {
+                    val appInfo = packageManager.getApplicationInfo(packageName, 0)
+                    val isSystemApp = (appInfo.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0
+
+                    if (processInfo.importance >= ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND && !isSystemApp) {
+                        val pid = processInfo.pid
+
+                        Runtime.getRuntime().exec(arrayOf("su", "-c", "kill -9 $pid"))
+                        Runtime.getRuntime().exec(arrayOf("su", "-c", "am force-stop $packageName"))
+                    }
+                } catch (e: PackageManager.NameNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+
+            Runtime.getRuntime().exec(arrayOf("su", "-c", "sync; echo 3 > /proc/sys/vm/drop_caches"))
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun updateRamInfo(ramUsageText: TextView, availableRamText: TextView) {
+        val ramUsagePercentage = getRamUsagePercentage()
+        val availableRamInMB = getAvailableRamInMB()
+        ramUsageText.text = "Ram Usage: $ramUsagePercentage%"
+        availableRamText.text = "Available RAM: $availableRamInMB MB"
+    }
+
 
 
     private fun displayRemainingTime() {
@@ -489,6 +574,14 @@ class MainActivity : AppCompatActivity() {
             Calendar.getInstance() // Return current time if values are not valid
         }
     }
+
+    private fun welcome() {
+        val intent = Intent(this, MainActivity::class.java) // Ganti dengan activity utama
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+    }
+
 
     // Function to handle logout
     private fun logout() {

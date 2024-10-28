@@ -27,7 +27,6 @@
 
             <!-- Title -->
             <TextView
-                android:id="@+id/textTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -40,13 +39,31 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/ramUsageText"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginTop="-12dp"
+                android:text="Ram Usage: 0%"
+                android:textColor="#9d03fc"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/availableRamText"
+                android:layout_width="290dp"
+                android:layout_height="27dp"
+                android:layout_marginTop="-12dp"
+                android:text="Available RAM: 0 MB"
+                android:textColor="#9d03fc"
+                android:textSize="18sp" />
+
+            <TextView
                 android:id="@+id/tvRemainingTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#9d03fc"
                 android:text="Time remaining: How did you get here?"
                 android:textSize="18sp"
-                android:paddingTop="20dp" />
+                android:paddingTop="-20dp" />
 
             <TextView
                 android:id="@+id/welcome"
@@ -297,6 +314,18 @@
                 android:elevation="4dp"
                 android:padding="12dp"
                 android:text="Unlock Max Graphics"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/clearRamButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="1dp"
+                android:backgroundTint="#6a00b0"
+                android:elevation="4dp"
+                android:padding="12dp"
+                android:text="Clear Ram"
                 android:textColor="#FFFFFF" />
 
             <!-- FPS Contributor Text -->
