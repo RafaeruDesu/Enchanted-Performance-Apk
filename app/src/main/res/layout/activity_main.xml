@@ -12,7 +12,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#160F1F"
+            android:background="#000000"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -21,33 +21,20 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
+                android:background="@drawable/navbackground"
+                app:menu="@menu/drawer_menu"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-            <!-- Welcome -->
+            <!-- Title -->
             <TextView
-                android:id="@+id/welcome"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_gravity="left|center"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
-                android:paddingBottom="-16dp"
-                android:text="Welcome,"
-                android:textColor="#ffffff"
-                android:textSize="32sp"
-                android:textStyle="bold" />
-
-            <!-- Rank -->
-            <TextView
-                android:id="@+id/Rank"
-                android:layout_width="wrap_content"
-                android:layout_height="31dp"
-                android:layout_gravity="left|center"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:paddingBottom="-8dp"
-                android:text="Developer"
-                android:textColor="#ffffff"
+                android:paddingBottom="16dp"
+                android:text="Enchanted Performance"
+                android:textColor="#9d03fc"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -78,8 +65,20 @@
                 android:textSize="18sp"
                 android:paddingTop="-20dp" />
 
-            <!-- Logo in the center -->
+            <TextView
+                android:id="@+id/welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingBottom="16dp"
+                android:text="Welcome"
+                android:textColor="#9d03fc"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
+            <!-- Logo in the center -->
             <TextView
                 android:id="@+id/cpuSpeedText"
                 android:layout_width="wrap_content"

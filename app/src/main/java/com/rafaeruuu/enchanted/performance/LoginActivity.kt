@@ -8,15 +8,11 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.VibrationEffect
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.rafaeruuu.enchanted.performance.ui.GovernorManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class LoginActivity : AppCompatActivity() {
@@ -26,7 +22,18 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var btnLogin: Button
     private lateinit var sharedPreferences: SharedPreferences
 
+    // Hardcoded users and their passwords
+    private val userPasswords = mapOf(
+        "Fox" to "kitsune",
+        "Rafaeru" to "Kanaeru",
+        "Tester" to "Meong",
+        "donation" to "RafaeruUPDATE",
+        "Perma-Tester" to "Ryuu",
+        "Zorknov" to "zorknov",
+        "Aldiwbw" to  "aldiwbw",
+        "Silly" to "silly"
 
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +46,8 @@ class LoginActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
 
+        // Handle Telegram button click
         btnTelegram.setOnClickListener {
-            // Intent to open Telegram
             val telegramIntent = Intent(Intent.ACTION_VIEW).apply {
                 data = Uri.parse("https://t.me/rafaeruuu") // Telegram link
             }
@@ -49,7 +56,6 @@ class LoginActivity : AppCompatActivity() {
 
         // Handle login button click
         btnLogin.setOnClickListener {
-            // Tambahkan pengecekan koneksi internet
             if (!isInternetAvailable()) {
                 Toast.makeText(this, "No internet connection. Please check your connection.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -61,19 +67,17 @@ class LoginActivity : AppCompatActivity() {
             if (validateLogin(username, password)) {
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
 
-                // Check for time user
-                if (username == "Tester") {
-                    // Set target date and time
-                    saveTargetDateAndTime(2024, 10, 28, 24, 15)
-                }
-                else if (username == "user") {
-                    // Set target date and time
-                    saveTargetDateAndTime(2024, 11, 1, 24, 1)
+
+                when (username) {
+                    "Tester" -> saveTargetDateAndTime(2024, 10, 29, 24, 15)
+                    "donation" -> saveTargetDateAndTime(2024, 11, 1, 24, 1)
+                    "Aldiwbw" -> saveTargetDateAndTime(2025, 10, 1, 24, 1)
+                    "Sily" -> saveTargetDateAndTime(2025, 10, 1, 24, 1)
+                    "Zorknov" -> saveTargetDateAndTime(2030, 1, 1, 24, 1)
                 }
 
 
-                // Check if login has expired
-                if (isLoginExpired()) {
+                if (isLoginExpired(username)) { // Pass username to check expiration
                     Toast.makeText(this, "Session expired. Please log in again.", Toast.LENGTH_SHORT).show()
                     logout() // Logout the user if session expired
                     return@setOnClickListener
@@ -88,8 +92,17 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
+        // Listener for pressing Enter on password EditText
+        etPassword.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                btnLogin.performClick() // Simulate button click
+                true // Indicate the action has been handled
+            } else {
+                false // Action not handled
+            }
+        }
+    }
 
     // Function to validate login
     private fun validateLogin(username: String, password: String): Boolean {
@@ -102,18 +115,12 @@ class LoginActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork ?: return false
             val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-            return when {
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
+            return activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         } else {
             val networkInfo = connectivityManager.activeNetworkInfo ?: return false
             return networkInfo.isConnected
         }
     }
-
 
     // Function to save target date and time to SharedPreferences
     private fun saveTargetDateAndTime(year: Int, month: Int, day: Int, hour: Int, minute: Int) {
@@ -127,14 +134,25 @@ class LoginActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    // Function to check if login has expired (based on target date and time)
-    private fun isLoginExpired(): Boolean {
+    // Function to check if login has expired
+    private fun isLoginExpired(username: String): Boolean {
+        // Check if the username does not require expiration
+        val usersWithoutExpiration = listOf("Rafaeru", "Perma-Tester", "Fox") // List of users without expiration
+
+        if (username in usersWithoutExpiration) {
+            return false // No expiration for these users
+        }
+
+        // If username is not in the no-expiration list, proceed to check expiration
         val targetDate = getTargetDateAndTime()
-        val currentTime = Calendar.getInstance()
+        val currentTime = Calendar.getInstance().apply {
+            timeZone = java.util.TimeZone.getTimeZone("GMT+8") // Ensure time zone is set
+        }
+
         return currentTime.after(targetDate) // Check if current time is after target date
     }
 
-    // Function to get the target date and time (returns Calendar object)
+    // Function to get the target date and time
     private fun getTargetDateAndTime(): Calendar {
         val year = sharedPreferences.getInt("TARGET_YEAR", 0)
         val month = sharedPreferences.getInt("TARGET_MONTH", 0)
@@ -172,4 +190,3 @@ class LoginActivity : AppCompatActivity() {
         finish() // Close current activity
     }
 }
-
