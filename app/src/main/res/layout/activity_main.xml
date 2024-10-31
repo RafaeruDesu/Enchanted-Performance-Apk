@@ -12,7 +12,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#000000"
+            android:background="#160F1F"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -21,19 +21,18 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:background="@drawable/navbackground"
-                app:menu="@menu/drawer_menu"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-            <!-- Title -->
+            <!-- Welcome -->
             <TextView
+                android:id="@+id/welcome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
                 android:paddingBottom="16dp"
-                android:text="Enchanted Performance"
+                android:text="Welcome,"
                 android:textColor="#9d03fc"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -65,20 +64,8 @@
                 android:textSize="18sp"
                 android:paddingTop="-20dp" />
 
-            <TextView
-                android:id="@+id/welcome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:paddingBottom="16dp"
-                android:text="Welcome"
-                android:textColor="#9d03fc"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
             <!-- Logo in the center -->
+
             <TextView
                 android:id="@+id/cpuSpeedText"
                 android:layout_width="wrap_content"
