@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Linear gradient from left to right -->
+    <gradient
+        android:type="linear"
+        android:startColor="#7A54B6"
+    android:endColor="#C88DFF"
+    android:angle="120"/>
+
+    <!-- Optional rounded corners -->
+    <corners
+        android:bottomLeftRadius="30dp"
+        android:bottomRightRadius="30dp"/>
+</shape>
