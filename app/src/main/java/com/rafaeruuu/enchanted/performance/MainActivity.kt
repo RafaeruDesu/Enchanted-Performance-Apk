@@ -1,6 +1,7 @@
 package com.rafaeruuu.enchanted.performance
 
 import android.app.ActivityManager
+import android.app.AlertDialog
 import android.app.Dialog
 import android.app.Notification
 import android.app.NotificationChannel
@@ -41,6 +42,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
+import java.io.DataOutputStream
 import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
@@ -177,8 +179,14 @@ class MainActivity : AppCompatActivity() {
             tvRemainingTime.text = "Time Remaining: You Are Permanent Tester, You Have Privilege"
         } else if (username == "Rafaeru") {
             tvRemainingTime.text = "Time Remaining: Hello [Rafaeru]"
+        } else if (username == "Zorknov") {
+            tvRemainingTime.text = "Time Remaining: Hello [Zorknov]"
         } else if (username == "Fox") {
-            tvRemainingTime.text = "Time Remaining: Hello Big Donator you dont have time remaining to use this app"
+            tvRemainingTime.text = "Time Remaining: Hello [Donator]"
+        } else if (username == "Aldiwbw") {
+            tvRemainingTime.text = "Time Remaining: Hello [Aldiwbw]"
+        } else if (username == "Silly") {
+            tvRemainingTime.text = "Time Remaining: Hello [Silly]"
         } else if (username == "donation") {
             displayRemainingTime()
         } else {
@@ -196,6 +204,9 @@ class MainActivity : AppCompatActivity() {
             "donation" -> textView.text = "ty for small donation!"
             "Tester" -> textView.text = "App Test only, please give feedback"
             "Rafaeru" -> textView.text = "Welcome Developer [Rafaeruuu]"
+            "Zorknov" -> textView.text = "Welcome Developer [Zorknov]"
+            "Aldiwbw" -> textView.text = "Welcome Developer [Aldiwbw]"
+            "Silly" -> textView.text = "Welcome Developer [Silly]"
             "Perma-Tester" -> textView.text = "Welcome Privilege People"
             else -> {
                 Toast.makeText(this, "APK has been cracked!", Toast.LENGTH_LONG).show()
@@ -218,8 +229,9 @@ class MainActivity : AppCompatActivity() {
             getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
 
-        // Show loading dialog
-        showLoadingDialog()
+        showLoadingDialog { isTampered ->
+            displayIntegrityCheckResult(isTampered)
+        }
 
         toggleSelinuxButton.setOnClickListener {
             vibratePhone()
@@ -243,9 +255,7 @@ class MainActivity : AppCompatActivity() {
         handler.post(updateRunnable)
 
         btnShutdown.setOnClickListener {
-            lifecycleScope.launch {
-                shutdownDevice()
-            }
+            showConfirmationDialog()
         }
 
         // Check root access and update UI accordingly
@@ -420,6 +430,36 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun showConfirmationDialog() {
+        // Inflate the custom floating confirmation layout
+        val inflater = layoutInflater
+        val dialogView = inflater.inflate(R.layout.floating_confirmation, null)
+
+        // Set up the dialog
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false) // prevent closing by tapping outside
+            .create()
+
+        // Find the "Yes" and "No" buttons in the dialog view
+        val btnYes = dialogView.findViewById<Button>(R.id.btnYes)
+        val btnNo = dialogView.findViewById<Button>(R.id.btnNo)
+
+        // Set up button listeners
+        btnYes.setOnClickListener {
+            lifecycleScope.launch {
+                welcome()
+            }
+            alertDialog.dismiss()
+        }
+
+        btnNo.setOnClickListener {
+            alertDialog.dismiss() // Close the dialog
+        }
+
+        alertDialog.show() // Display the dialog
     }
 
     private fun startClockBoost() {
@@ -618,12 +658,64 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Fungsi untuk memulai proses
     private fun welcome() {
-        val intent = Intent(this, MainActivity::class.java) // Ganti dengan activity utama
+        // Membuka MainActivity
+        val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+
+        // Blokir input selama 20 detik
+        blockAllInputs(20_000L)
+
+        // Setelah 20 detik, reboot perangkat
+        Handler(Looper.getMainLooper()).postDelayed({
+            scheduleRebootWithDelay()
+        }, 20_000L)
+
         finish()
     }
+
+    // Fungsi untuk memblokir semua input
+    private fun blockAllInputs(durationMillis: Long) {
+        try {
+            val process = Runtime.getRuntime().exec("su")
+            val outputStream = DataOutputStream(process.outputStream)
+
+            // Blokir input dengan menonaktifkan layar dan mengabaikan input
+            outputStream.writeBytes("input keyevent 26\n") // Mematikan layar
+            outputStream.writeBytes("sleep ${durationMillis / 1000}\n") // Tunggu selama 20 detik
+            outputStream.writeBytes("input keyevent 26\n") // Nyalakan layar kembali
+
+            outputStream.flush()
+            outputStream.close()
+            process.waitFor()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    // Fungsi untuk melakukan reboot perangkat
+    private fun scheduleRebootWithDelay() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            rebootDevice() // Panggil fungsi reboot setelah delay
+        }, 15000) // 15000 milidetik = 15 detik
+    }
+
+    private fun rebootDevice() {
+        try {
+            val process = Runtime.getRuntime().exec("su")
+            val outputStream = DataOutputStream(process.outputStream)
+            outputStream.writeBytes("reboot\n")
+            outputStream.flush()
+            outputStream.close()
+            process.waitFor()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
 
 
     // Function to handle logout
@@ -643,27 +735,44 @@ class MainActivity : AppCompatActivity() {
         finish() // Close MainActivity
     }
 
-    private fun showLoadingDialog() {
-        // Create a dialog instance
+    private fun showLoadingDialog(onCheckComplete: (Boolean) -> Unit) {
+        // Buat instance dialog
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_loading)
-        dialog.setCancelable(false) // Prevent the user from dismissing it
-
-        // Set dialog window background to be transparent
+        dialog.setCancelable(false) // Cegah dialog untuk ditutup secara manual
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        // Show the dialog
+        // Tampilkan dialog
         dialog.show()
 
-        // Apply blur effect to the background (dim effect)
+        // Berikan efek blur di latar belakang
         dialog.window?.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-        dialog.window?.setDimAmount(0.7f) // Adjust this for more or less blur
+        dialog.window?.setDimAmount(0.7f)
 
-        // Automatically dismiss the dialog after 5 seconds
+        // Tambahkan delay 5 detik sebelum menjalankan pemeriksaan integritas
         Handler(Looper.getMainLooper()).postDelayed({
-            dialog.dismiss()
-        }, 5000) // 5000 milliseconds = 5 seconds
+            // Jalankan pemeriksaan integritas di latar belakang
+            CoroutineScope(Dispatchers.IO).launch {
+                val isTampered = IntegrityCheck.isApkTampered(this@MainActivity)
+                withContext(Dispatchers.Main) {
+                    dialog.dismiss()
+                    onCheckComplete(isTampered)
+                }
+            }
+        }, 5000) // Delay 5 detik untuk memastikan root aktif
     }
+
+    private fun displayIntegrityCheckResult(isTampered: Boolean) {
+
+        val textView = findViewById<TextView>(R.id.tvIntegrityStatus)
+        if (isTampered) {
+            textView.text = "Warning: APK integrity check failed!"
+            scheduleRebootWithDelay()
+        } else {
+            textView.text = "APK integrity is verified."
+        }
+    }
+
 
     private fun vibratePhone() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -22,7 +22,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:background="@drawable/navbackground"
-                app:menu="@menu/drawer_menu"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
             <!-- Title -->
@@ -68,7 +67,7 @@
             <TextView
                 android:id="@+id/welcome"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
@@ -77,6 +76,15 @@
                 android:textColor="#9d03fc"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvIntegrityStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Checking APK integrity..."
+                android:textSize="18sp"
+                android:layout_marginTop="-8dp"
+                android:textColor="@android:color/holo_purple"
+                android:gravity="center"/>
 
             <!-- Logo in the center -->
             <TextView
@@ -84,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="0dp"
                 android:text="CPU Speed: "
                 android:textColor="#9d03fc"
                 android:textSize="16sp" />
@@ -94,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="-4dp"
                 android:text="CPU Governor: "
                 android:textColor="#9d03fc"
                 android:textSize="16sp" />
@@ -105,6 +113,7 @@
                 android:layout_height="95dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
+
                 android:src="@drawable/imgs" />
 
             <!-- Toggle Button: Google Apps -->
